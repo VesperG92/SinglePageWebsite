@@ -7,6 +7,14 @@ require 'PHPMailer/PHPMailer.php';
 require 'PHPMailer/Exception.php';
 require 'PHPMailer/SMTP.php';
 
+//Evitar mensajes con links spam
+function contieneEnlaces($texto)
+{
+    // Expresión regular para detectar enlaces HTTP/HTTPS y aquellos que comiencen con 'http'
+    $patron = '/\bhttps?:\/\/\S+|\bhttp\S+/i';
+    return preg_match($patron, $texto);
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nombre = $_POST['nombre'];
     $telefono = $_POST['telefono'];
@@ -15,6 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!$privacidad) {
         echo "Debe aceptar la cláusula de privacidad.";
+        exit;
+    }
+
+    // Validar si el mensaje contiene enlaces
+    if (contieneEnlaces($mensaje)) {
+        echo "No se permiten enlaces en el mensaje.";
         exit;
     }
 
