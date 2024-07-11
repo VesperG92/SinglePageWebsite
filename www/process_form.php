@@ -7,11 +7,11 @@ require 'PHPMailer/PHPMailer.php';
 require 'PHPMailer/Exception.php';
 require 'PHPMailer/SMTP.php';
 
-//Evitar mensajes con Spam
+//Evitar mensajes con links spam
 function contieneEnlaces($texto)
 {
-    // Expresión regular para detectar enlaces HTTP/HTTPS
-    $patron = '/https?:\/\/\S+/i';
+    // Expresión regular para detectar enlaces HTTP/HTTPS y aquellos que comiencen con 'http'
+    $patron = '/\bhttps?:\/\/\S+|\bhttp\S+/i';
     return preg_match($patron, $texto);
 }
 
